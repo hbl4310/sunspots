@@ -1,0 +1,53 @@
+﻿Introduction  
+Sunspots are darker (cooler) areas on the sun, caused by an increase in magnetic flux in that region. The magnetic field is around 2,500 times stronger than Earth’s. The strength of the magnetic field causes an atmospheric pressure differential, which lowers the temperature of the sunspot. Sunspots tend to occur in pairs that have magnetic fields of opposing polarity. A typical sunspot has a dark region (umbra) surrounded by a lighter region (penumbra), and on average are the same size as the Earth. 
+
+
+The number of sunspots have been tracked since 1749 in Zurich, Switzerland, and their appearance has been linked to changes in space weather and even the earth’s climate.
+
+
+Motivation
+The dividing line between areas of opposing magnetic fields in a sunspot is an area of increased solar activity, including Coronal Mass Ejections and solar flares. These result in increased geomagnetic storm activity on Earth which results in an increase in Northern and Southern Lights and potential disruption to radio transmissions and power grids. Sunspots also have a direct influence on the density of the atmosphere where Low Earth Orbit satellites fly. This impacts satellite launch planning, and can also affect sensitive electronic equipment onboard orbiting satellites to the extent that satellites would be re-oriented in anticipation of these events to protect from increased radiation.
+
+
+Prediction
+Since there is some periodicity in the number of sunspots, there is a possibility of predicting the future number of sunspots. However, as people still don't know what is the underlying mechanism that causes the sunspot cycle, predicting the magnitude and length of the cycle remains a difficult task.
+
+
+Project Goal
+The goal of this project is to build a multi-fidelity Gaussian Process (GP) emulator to forecast the 25th solar cycle and compare our results with predictions made by other researchers.
+
+
+Data
+Sunspot observations are generally measured using the International sunspot number (aka Wolf number) which considers both the number of individual spots, and the sunspot groups, as well as accounting for location and instrumentation. Since 1 July 2015, the international sunspot number series was revised, leading to an overall increase of the entire series by a factor of around 1.6. There is some doubt about the accuracy of the series, motivating alternative series (http://centaur.reading.ac.uk/36853/1/308_OSF1_jgra51127.pdf, https://arxiv.org/abs/1506.00755, https://arxiv.org/abs/1512.06421, https://arxiv.org/abs/1702.06183). There are also indirect sunspot observation data (cosmogenic isotope 44Ti in meteorites, solar total and spectral irradiance reconstruction) which support Chatzistergos et al (2017) https://arxiv.org/abs/1702.06183. 
+
+
+(ref https://en.wikipedia.org/wiki/Wolf_number) 
+
+
+Our emulator is going to build upon historical data, as well as forecasting data from various models [a]of the sun cycle.
+
+
+Some possible dataset that we are going to use:
+https://wwwbis.sidc.be/silso/datafiles
+https://www.ngdc.noaa.gov/stp/solar/ssndata.html
+https://www.sws.bom.gov.au/Solar/1/6 
+https://data.opendatasoft.com/explore/dataset/daily-sunspot-number@datastro/export/ 
+
+
+(i think there are multiple places where sunspots are measured from, which we could aggregate; differences in measurements we can call epistemic uncertainty[b])
+
+
+<<modelling resources>> 
+https://towardsdatascience.com/modelling-the-number-of-sunspots-with-time-series-analysis-39ce7d88cff3 
+https://www.sciencedirect.com/science/article/abs/pii/S0273117719308026
+https://www.govinfo.gov/content/pkg/GOVPUB-C13-ed096bafbed7ba648ea0e5201731b022/pdf/GOVPUB-C13-ed096bafbed7ba648ea0e5201731b022.pdf 
+https://www.nature.com/articles/s41467-018-07690-0
+(predicting sunspot latitudes) https://en.wikipedia.org/wiki/Sp%C3%B6rer%27s_law 
+
+
+
+
+<<background information resources>>
+https://www.weather.gov/fsd/sunspots 
+[a]we might need some info about the most common/widely used models
+[b]Haha :DD certainly an excuse you would see in a paper
