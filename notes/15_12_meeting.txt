@@ -1,0 +1,13 @@
+﻿Meeting notes
+* Brady did a Jupyter Notebook demo
+   * First data from google doc
+   * GPRegression
+
+
+ToDo’s
+* HanBo: set up GitHub for the project
+* Mina: decide on data + send HanBo bookmark links
+   * Granularity
+   * Train / Test data
+* Brady: do first simple model experiment
+   * GP with RBF kernel
