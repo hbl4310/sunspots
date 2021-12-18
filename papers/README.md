@@ -19,6 +19,8 @@
     - Satellite Drag
 - The solar cycle prediction on the page is the "official" forecast by NOAA, NASA and Space Environmental Service (SOS)
     - I couldn't find details about the prediction model on the website, and might need to dig deeper
+    - [This page](https://www.nasa.gov/feature/goddard/2020/what-will-solar-cycle-25-look-like-sun-prediction-model) seems to suggest that the predictions come from a "polar magnetic field model". 
+        - "This uses measurements of the magnetic field at the Sun’s north and south poles. The idea is that the magnetic field at the Sun’s poles acts like a seed for the next cycle. If it’s strong during solar minimum, the next solar cycle will be strong; if it’s diminished, the next cycle should be too."
 
 ### Miscellaneous 
 - Blog post with predictive models using ARIMA and LSTMs: https://towardsdatascience.com/modelling-the-number-of-sunspots-with-time-series-analysis-39ce7d88cff3
@@ -34,7 +36,7 @@
     - autoregressive (AR)
     - subset AR (SAR)
     - threshold AR transformed by squaring (TTAR)
-    - bi-linar model 
+    - bi-linear model 
     - adaptive spline threshold regression (ASTAR)
     - a neural network model (CNAR)
     - fundamental model proposed by solar physicists
