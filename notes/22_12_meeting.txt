@@ -1,0 +1,15 @@
+Questions
+* Do we have to have 0-mean 1-std data as input to GP?
+* Why does periodic kernel GP flatline with too much data?
+* RBF + periodic: why is it flat on the edges?
+
+ToDo’s
+* Start writing the report (Overleaf)
+    * Mina: data
+    * Hanbo: prediction models
+    * Brady: Introduction to experiments
+* Play around with the code (all of us)
+    * Training data: up to cycle 23
+    * Testing data: cycle 24
+    * In the end: comparison with the 25th cycle prediction data
+* Find answers to above questions (all of us)
