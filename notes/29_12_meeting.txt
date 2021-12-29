@@ -1,0 +1,22 @@
+Questions
+* Gaussian Processes on time series? - do some reading (all of us)
+* Why does the GP work better on less data?
+    * Just because of less noise?
+
+ToDos
+* How many periodic kernels were used in the Warped GP model? - Hanbo
+* Look up how smoothed data are created - Mina
+* Continue experimenting on kernels - Brady
+
+(Brady) GP works better with
+* white noise error kernel
+* Less data (cycle min and max plus 5 random points inbetween)
+* x axis numbered from 0 works better than 1755.0, 1755.01, … etc.
+
+(Hanbo) Warped Gaussian Process model:
+* Spectral density kernel - RBF times cosine kernel
+* Predictions are non-negative
+* Optimization w/ genetic algorithm
+    * Kernel params
+    * Number of kernels
+    * “Warping function”: cubic spline
