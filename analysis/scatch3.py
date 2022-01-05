@@ -66,7 +66,7 @@ sampledata_int = sample_interval(data, sampling_interval)
 sampledata_mean = sample_meaninterval(data, sampling_interval, ['year_frac', 'ssn_total'])
 sampledata = sampledata_mean
 
-min_train_year = 1800  # 1900
+min_train_year = 1848  # 1900
 min_test_year = 2018
 traindata, testdata = split_train_test(sampledata, min_test_year=min_test_year, min_train_year=min_train_year, year_col='year_frac')
 
@@ -164,45 +164,52 @@ torch.save(model.state_dict(), f'./models/gp_{hash(str(model))}.model')
 
 # %% load model
 # model = GP(mean, kernel, train_x, transf_train_y, likelihood=lik, warp=warp)
-# model.load_state_dict(torch.load('./models/gp_smk+rq.model'))
+# model.load_state_dict(torch.load('./models/gp_smk+rq_1800data.model'))
 
 # %% analysis
-def plot_model_fit(model, smk, f_s=12, figsize=(14, 12), transform=lambda x: x):
+def plot_model_fit(model, smk, f_s=12, figsize=(14, 12), transform=identity):
     pred, lower, upper = model.predict(all_x)
 
-    fig, (ax_t, ax_f) = plt.subplots(2, 1, figsize=figsize)
-    ax_t.set_title('Model fit')
-    ax_t.set_xlabel('t')
-    ax_t.set_ylabel('ssn_total')
-    ax_t.plot(all_x, transform(pred.mean).numpy().flatten(), label='Predicted mean')
-    ax_t.fill_between(all_x, transform(lower).numpy(), transform(upper).numpy(), alpha=0.5, label='2 Stdev.')
-    data_ = data.loc[data.year_frac > min_train_year]
-    ax_t.scatter(data_.year_frac, transform(input_transform(data_.ssn_total)), label='Raw obs.', marker='x', alpha=0.3)
-    ax_t.scatter(train_x, transform(transf_train_y), label='Train')
-    ax_t.scatter(test_x, transform(transf_test_y), label='Test')
-    ax_t.legend()
+    if transform == identity: 
+        ts = [(transform, 'ssn_total'), ]
+        nplots = 2
+    else:
+        ts = [(identity, 'transformed ssn_total'), (transform, 'ssn_total')]
+        nplots = 3
+    fig, ax = plt.subplots(nplots, 1, figsize=figsize)
+    for i,(t,ylbl) in enumerate(ts): 
+        ax_t = ax[i]
+        ax_t.set_title('Model fit')
+        ax_t.set_xlabel('t')
+        ax_t.set_ylabel(ylbl)
+        ax_t.plot(all_x, t(pred.mean).numpy().flatten(), label='Predicted mean')
+        ax_t.fill_between(all_x, t(lower).numpy(), t(upper).numpy(), alpha=0.5, label='2 Stdev.')
+        data_ = data.loc[data.year_frac > min_train_year]
+        ax_t.scatter(data_.year_frac, t(input_transform(data_.ssn_total)), label='Raw obs.', marker='x', alpha=0.3)
+        ax_t.scatter(train_x, t(transf_train_y), label='Train')
+        ax_t.scatter(test_x, t(transf_test_y), label='Test')
+        ax_t.legend(loc='upper left', ncol=2)
 
     density = spectral_density(smk)
     nyquist = f_s/2
     freq = torch.linspace(0, nyquist, 5000).reshape(-1, 1)
     density2 = density.log_prob(freq).exp()
-    plot_density(freq, density2, ax=ax_f)
-    ax_f.set_ylabel('Density')
+    plot_density(freq, density2, ax=ax[nplots-1])
+    ax[nplots-1].set_ylabel('Density')
     fig.tight_layout()
     return freq, density2, fig, ax
 
 print(f'train log-likelihood: {data_loglik(model, train_x, transf_train_y):.2f}')
 print(f'test log-likelihood: {data_loglik(model, test_x, transf_test_y):.2f}')
-freq, density, fig, ax = plot_model_fit(model, smk, f_s=f_s)
 freq, density, fig, ax = plot_model_fit(model, smk, f_s=f_s, transform=output_transform)
 peak_freq, peak_density = get_peaks(freq, density)
 print(f'freq peaks at: {", ".join([f"{1/f:.2f} ({d:.2f})" for f,d in zip(peak_freq, peak_density)])}')
 
 
 # %%
-def plot_model_kernel(figsize=(8, 7)):
+def plot_model_kernel(kernel, figsize=(8, 7)):
     fig, ax = plt.subplots(figsize=figsize)
-    plot_kernel(model.cov, xx=torch.linspace(-2, 2, 1000), ax=ax)
+    plot_kernel(kernel, xx=torch.linspace(-2, 2, 1000), ax=ax)
     ax.set_title('Learned kernel')
     fig.tight_layout()
     return fig, ax
@@ -221,8 +228,9 @@ def plot_covariance(kernel, grid, figsize=(8, 7)):
     fig.tight_layout()
     return fig, ax
 
-fig, ax1 = plot_model_kernel()
-fig, ax2 = plot_covariance(model.cov, history_x)
+fig, ax = plot_model_kernel(model.cov)
+fig, ax = plot_model_kernel(smk)
+fig, ax = plot_covariance(model.cov, history_x)
 
 
 
