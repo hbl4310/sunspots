@@ -29,3 +29,13 @@ predictions = model_fit.predict()
 plot = pd.DataFrame({'Date':data.loc[cut_t:, 'year_frac'],'Actual':abs(y[cut_t:]),"Predicted": predictions[cut_t:]})
 plot.plot(x='Date',y=['Actual','Predicted'],title = 'ARMA(1,1) Sunspots Prediction',legend = True, figsize=(30,8))
 RMSE = np.sqrt(np.mean(residuals**2))  
+
+# %%
+forecast = model_fit.forecast(steps=12*3)
+
+# %%
+fig, ax = plt.subplots(figsize=(20,10))
+ax.plot(forecast[0])
+ax.fill_between(range(len(forecast[0])), *zip(*forecast[2]), alpha=0.2)
+
+# %%
