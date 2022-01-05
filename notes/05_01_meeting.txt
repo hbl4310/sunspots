@@ -1,0 +1,21 @@
+Findings
+* (Mina) How smoothed data is calculated: https://wwwbis.sidc.be/silso/faq6
+* (Mina) Nasa model for predicting 25th Solar Cycle: https://watchers.news/2019/06/26/irina-kitiashvili-with-the-nasa-solar-cycle-25-forecast/
+    * they say maximum will be about 50 with an error estimate of 15 - 30 %.
+    * paper: http://arxiv.org/abs/1910.00820
+* (Hanbo): Success with fitting the data
+    * data was not normally distributed so added a pre-processing step which transforms the data
+        * this transformation is reversed after prediction
+    * spectral mixture kernel
+    * tried warping, didn't work
+    * low-fidelity model for the multi-fidelity case: ARIMA (Auto-Regressive Integrated Moving Average)
+* (Brady) Tried out warped kernel paper's method (https://github.com/italo-goncalves/geoML)
+    * not as good as spectral mixture kernel
+
+
+ToDos
+* play with the model
+    * different kernels
+    * multi fidelity (generating low-quality data / using Solanki data)
+    * parameter search (automatic or by hand)
+    * warping
