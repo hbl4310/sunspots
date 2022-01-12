@@ -4,6 +4,7 @@ from gpytorch.distributions import MultivariateNormal
 from gpytorch.likelihoods import GaussianLikelihood, FixedNoiseGaussianLikelihood
 from tqdm import tqdm
 from utility import newton
+import numpy as np 
 
 # Convenience class inheriting from ExactGP
 #    https://docs.gpytorch.ai/en/v1.5.1/models.html#exactgp
@@ -67,3 +68,10 @@ def train(model, optimizer, mll, train_x, train_y, iters):
 def data_loglik(model, x, y):
     pred = model.predict(x, conf=False)
     return pred.log_prob(y)
+
+def calc_BIC(model, x, y):
+    # lower BIC better
+    loglik = data_loglik(model, x, y).item()
+    n = len(x)
+    k = sum(p.numel() for p in model.parameters())
+    return k*np.log(n) - 2 * loglik
