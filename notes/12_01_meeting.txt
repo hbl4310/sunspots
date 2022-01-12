@@ -1,0 +1,31 @@
+* Hanbo: architecture search with BIC
+    * doesn't give better results than smk
+    * tries to fit architectures with less parameters because of k
+        * try without?
+
+** Last ToDos **
+(Mina)
+- Multifidelity GP (optional)
+    * not possible in GPytorch - try BoTorch or GPy?
+- Lectoring writing
+
+(Brady)
+- some additional runs with different params (for example with/without error term)
+
+Writing:
+(Hanbo)
+- kernel search
+(Brady)
+- methodology
+- kernel intuitions
+
+Rough outline:
+methodology - GP introduction
+    is warping necessary?
+kernel intuitions - brief
+    more detail on smk
+fitting manually with smk and arbitrary num_mixtures
+    criteria for evaluaton: likelihood, BIC, AIC...
+kernel search logic
+    tried BIC and log likelihoood
+    further work
