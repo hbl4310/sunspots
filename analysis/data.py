@@ -6,14 +6,20 @@ import matplotlib.pyplot as plt
 
 SILSO_DATAPATH = '../data/SILSO data/'
 SILSO_DATACOLS = {
-    'SN_m_tot_V2.0': ['year', 'month', 'yer_frac', 'ssn_total', 'ssn_stdev', 'nobs', 'marker']
+    'SN_m_tot_V2.0': ['year', 'month', 'year_frac', 'ssn_total', 'ssn_stdev', 'nobs', 'marker'],
+    'SN_ms_tot_V2.0': ['year', 'month', 'year_frac', 'ssn_total', 'ssn_stdev', 'nobs', 'marker']
 }
+
+SOLANKI_DATAPATH = '../data/Solanki data/solanki.csv'
+SOLANKI_DATACOLS = ['YearBP', 'SN', 'sigma']
 
 def get_silso_data(table):
     data_path = os.path.join(SILSO_DATAPATH, f'{table}.csv')
     print(data_path)
     return pd.read_csv(data_path, sep=';',  names=SILSO_DATACOLS[table])
 
+def get_solanki_data():
+    return pd.read_csv(SOLANKI_DATAPATH, sep= ',', header=0, names=SOLANKI_DATACOLS)
 
 def centre_x(data):
     data['year_frac'] = data['year'] + data['month'] * 1/12 - 1/24
