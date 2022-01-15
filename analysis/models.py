@@ -23,13 +23,17 @@ class GP(gp.models.ExactGP):
             x = self.warp(x)
         return MultivariateNormal(self.mean(x), self.cov(x))
 
-    def predict(self, x, conf=True):
-        self.eval(), self.likelihood.eval()
+    def predict(self, x, conf=True, train=False):
+        if not train: 
+            self.eval(), self.likelihood.eval()
+        else: 
+            self.train(), self.likelihood.train()
         if self.warp: 
             self.warp(x)
         # The gpytorch.settings.fast_pred_var flag activates LOVE (for fast variances)
         # See https://arxiv.org/abs/1803.06058
-        with torch.no_grad(), gp.settings.fast_pred_var():
+        # with torch.no_grad(), gp.settings.fast_pred_var():
+        with torch.no_grad(), gp.settings.lazily_evaluate_kernels(False):
             pred = self.likelihood(self(x))
             if conf: 
                 lower, upper = pred.confidence_region()
@@ -65,13 +69,13 @@ def train(model, optimizer, mll, train_x, train_y, iters):
         losses.append(loss.item())
     return losses
 
-def data_loglik(model, x, y):
-    pred = model.predict(x, conf=False)
+def data_loglik(model, x, y, train=False):
+    pred = model.predict(x, conf=False, train=train)
     return pred.log_prob(y)
 
-def calc_BIC(model, x, y):
+def calc_BIC(model, x, y, train=False):
     # lower BIC better
-    loglik = data_loglik(model, x, y).item()
+    loglik = data_loglik(model, x, y, train=train).item()
     n = len(x)
     k = sum(p.numel() for p in model.parameters())
     return k*np.log(n) - 2 * loglik
