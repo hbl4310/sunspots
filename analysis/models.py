@@ -23,7 +23,6 @@ class GP(gp.models.ExactGP):
             x = self.warp(x)
         return MultivariateNormal(self.mean(x), self.cov(x))
 
-<<<<<<< Updated upstream
     def predict(self, x, conf=True, train=False):
         if not train: 
             self.eval(), self.likelihood.eval()
@@ -34,13 +33,6 @@ class GP(gp.models.ExactGP):
         # The gpytorch.settings.fast_pred_var flag activates LOVE (for fast variances)
         # See https://arxiv.org/abs/1803.06058
         # with torch.no_grad(), gp.settings.fast_pred_var():
-=======
-    def predict(self, x, conf=True, iseval=False):
-        if iseval: 
-            self.eval(), self.likelihood.eval()
-        if self.warp: 
-            self.warp(x)
->>>>>>> Stashed changes
         with torch.no_grad(), gp.settings.lazily_evaluate_kernels(False):
             pred = self.likelihood(self(x))
             if conf: 
