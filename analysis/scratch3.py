@@ -38,7 +38,7 @@ from data import (
     sample_random, sample_interval, sample_meaninterval, 
     plot_data,
 )
-from models import GP, train, data_loglik
+from models import GP, train, data_loglik, calc_BIC
 from utility import (
     spectral_density, 
     get_peaks, 
@@ -64,6 +64,7 @@ sampling_interval = 4  # months
 f_s = 12 / sampling_interval
 sampledata_int = sample_interval(data, sampling_interval)
 sampledata_mean = sample_meaninterval(data, sampling_interval, ['year_frac', 'ssn_total'])
+# sampledata_mean['year_frac'] += sampling_interval / 12 / 2
 sampledata = sampledata_mean
 
 min_train_year = 1848  # 1900
@@ -75,6 +76,7 @@ test_x, test_y = to_tensor(testdata['year_frac']), to_tensor(testdata['ssn_total
 
 history_x = torch.cat([train_x, test_x])
 future_x = torch.tensor([history_x.max() + 1/12*(i+1) for i in range(11*12)])
+# future_x = torch.tensor([2022. + sampling_interval * 1/12*(i+1) for i in range(11*12//sampling_interval)])
 all_x = torch.cat([history_x, future_x])
 
 #%% plot data
@@ -199,6 +201,7 @@ def plot_model_fit(model, smk, f_s=12, figsize=(14, 12), transform=identity):
     fig.tight_layout()
     return freq, density2, fig, ax
 
+print(f'BIC {calc_BIC(model, train_x, transf_train_y):.2f}')
 print(f'train log-likelihood: {data_loglik(model, train_x, transf_train_y):.2f}')
 print(f'test log-likelihood: {data_loglik(model, test_x, transf_test_y):.2f}')
 freq, density, fig, ax = plot_model_fit(model, smk, f_s=f_s, transform=output_transform)
@@ -229,7 +232,6 @@ def plot_covariance(kernel, grid, figsize=(8, 7)):
     return fig, ax
 
 fig, ax = plot_model_kernel(model.cov)
-fig, ax = plot_model_kernel(smk)
 fig, ax = plot_covariance(model.cov, history_x)
 
 
