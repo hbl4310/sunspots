@@ -21,8 +21,9 @@ def get_silso_data(table):
 def get_solanki_data():
     return pd.read_csv(SOLANKI_DATAPATH, sep= ',', header=0, names=SOLANKI_DATACOLS)
 
-def centre_x(data):
-    data['year_frac'] = data['year'] + data['month'] * 1/12 - 1/24
+def centre_x(data, minyear=0):
+    data['year_frac_centered'] = data['year'] + data['month'] * 1/12 - 1/24
+    data['year_frac_0'] = data['year_frac_centered'] - minyear
     return data
 
 
